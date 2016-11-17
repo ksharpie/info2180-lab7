@@ -7,12 +7,32 @@ $dbname = 'world';
 
 $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
-$stmt = $conn->query("SELECT * FROM countries");
+$country = $_GET['country_name'];
 
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$all = $_GET['all'];
 
-echo '<ul>';
-foreach ($results as $row) {
-  echo '<li>' . $row['name'] . ' is ruled by ' . $row['head_of_state'] . '</li>';
+if($all == 'true')
+{
+    $stmt = $conn->query("SELECT * FROM countries");
+
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo '<ul>';
+    foreach ($results as $row) {
+        echo '<li>' . $row['name'] . ' is ruled by ' . $row['head_of_state'] . '</li>';
+    }
+    echo '</ul>';   
 }
-echo '</ul>';
+elseif (isset($country))
+{
+    $stmt = $conn->query("SELECT * FROM countries WHERE name LIKE '%$country%'");
+
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo '<ul>';
+    foreach ($results as $row) {
+        echo '<li>' . $row['name'] . ' is ruled by ' . $row['head_of_state'] . '</li>';
+    }
+    echo '</ul>';   
+}
+
